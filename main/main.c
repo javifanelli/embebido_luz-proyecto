@@ -29,6 +29,7 @@
 #include "../components/javi/led.c"
 #include "../components/javi/wifi_con.c"
 #include "../components/javi/mqtt_funcs.c"
+#include "../components/javi/data.h"
 
 #define QUEUE_LENGTH 10 // Define la longitud máxima de la cola
 static QueueHandle_t _queue;
@@ -55,5 +56,6 @@ void app_main(void)
 	
 	btn_enc=false;
 	ssd1306_clear_screen(&devd, false);
+	xTaskCreate(get_data, "get_data", 4096*8, NULL, 3, NULL);
 	xTaskCreate(read_enc, "read_enc", 4096*2, NULL, 4, NULL);
 }

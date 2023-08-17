@@ -14,7 +14,7 @@ char RSSI_CHAR[10]; // Potencia de la señal en char
 bool net_con = false; // Variable global para almacenar el estado de la conexión WiFi
 bool mqtt_state = false; // Variable para detectar el estado de conexión al servidor por MQTT
 int out_dim = 0;
-char out_char[10];
+char out_char[20];
 int set_point = 20; // Variable para ajustar el valor de set point de temperatura entre 18 y 28 grados Celsius
 char sp_char[10]; // Variable de set point en char
 int modo = 0; // Variable para el modo. 0=manual, 1=automático

@@ -1,6 +1,4 @@
 #include <driver/ledc.h>
-#include "esp_wifi.h"
-#include "esp_log.h"
 
 #define PWM_CHANNEL      LEDC_CHANNEL_0
 #define PWM_GPIO_NUM     GPIO_NUM_13
@@ -13,19 +11,17 @@
 
 TickType_t xLastWakeTime;
 
-const int min_mqtt=5; // tiempo en minutos para enviar el mensaje MQTT
-int cont_mqtt = min_mqtt * 60 / refresh;
 bool btn_enc;
 extern bool inc_enc;
 extern bool dec_enc;
 extern int out_dim;
-bool time_sinc_ok = false;
+
 
 void config_led (void);
-void pwm_init(void);
-void set_pwm_duty(int);
+void pwm_init (void);
+void set_pwm_duty (int);
 void read_enc (void *pvParameter);
-void get_data (void *pvParameter);
+
 
 void config_led (void)
 {
@@ -44,7 +40,7 @@ void config_led (void)
 
 void pwm_init()
 {
-    // Configurar el módulo LEDC
+    // Configuración del módulo LED
     ledc_timer_config_t ledc_timer = {
         .duty_resolution = PWM_RESOLUTION,
         .freq_hz = PWM_FREQ_HZ,
@@ -113,33 +109,8 @@ void read_enc (void *pvParameter)
 			pant_main();
 		}
 		set_pwm_duty(out_dim);
+        sprintf(out_char, "%d", out_dim/102*10);
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	}
 	vTaskDelete(NULL);
-}
-
-void get_data(void *pvParameter)
-{
-    while(1) {
-        if (!time_sinc_ok)
-            obtain_time();
-        time_t now = time(NULL);
-        timeinfo = localtime(&now);
-        strftime(pant_time, sizeof(pant_time), "%H:%M %d-%m-%Y", timeinfo);
-        sprintf(hum_char, "%d", humidity/10);
-        if(level==0)
-            pant_main();
-        esp_wifi_sta_get_ap_info(&ap_info);
-        net_con = (ap_info.authmode != WIFI_AUTH_OPEN);
-        if(cont_mqtt==60){
-            if (net_con==false)
-            	esp_wifi_connect();
-            cont_mqtt=0;
-            mqtt_send_info();
-            }
-        cont_mqtt++;
-        vTaskDelay(pdMS_TO_TICKS(1000*refresh));
-        	
-   }
-   vTaskDelete(NULL);
 }

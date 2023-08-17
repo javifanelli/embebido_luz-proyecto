@@ -87,18 +87,19 @@ void pant_nocon(void)
 void pant_main(void)
 {
 	ssd1306_display_text(&devd, 0, pant_time, strlen(pant_time), true);
-    sprintf(out_char, "%d", out_dim/102);
-	ssd1306_display_text_with_value(&devd, 1, "Salida %: ", 10, out_char, strlen(out_char), false);
-	if(!out_dim)
-		ssd1306_display_text(&devd, 3, "Salida: OFF", 11, false);
-	if(out_dim)
-		ssd1306_display_text(&devd, 3, "Salida: ON", 10, false);
-	if (mqtt_state){
-		ssd1306_display_text(&devd, 5, "Server: ONLINE ", 15, false);
-	}
-	if (!mqtt_state) {
-		ssd1306_display_text(&devd, 5, "Server: OFFLINE", 15, false);
-	}
+	ssd1306_display_text_with_value(&devd, 1, "Nivel %: ", 9, out_char, 3, false);
+	if(out_dim==0)
+		ssd1306_display_text(&devd, 2, "Salida: OFF", 11, false);
+	if(out_dim>0)
+		ssd1306_display_text(&devd, 2, "Salida: ON ", 11, false);
+	if(modo==0)
+		ssd1306_display_text(&devd, 3, "Modo: Manual", 16, false);
+	if(modo==1)
+		ssd1306_display_text(&devd, 3, "Modo: Automatico", 16, false);
+	if (mqtt_state)
+		ssd1306_display_text(&devd, 4, "Server: ONLINE ", 15, false);
+	else if (!mqtt_state)
+		ssd1306_display_text(&devd, 4, "Server: OFFLINE", 15, false);
 	ssd1306_display_text(&devd, 7, "Menu", 4, true);
 	if (btn_enc){
 		level=1;

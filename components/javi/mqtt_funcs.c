@@ -15,8 +15,8 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_pem_end");
 static int connection_retries = 0;
 static const char *ID ="2";
 static char *buffer_mqtt;
-static char TOPIC_OUT[50]="/home/dimmer/data"; // Topic de MQTT de datos de salida
-static char TOPIC_IN[50]="/home/dimmer/settings"; // Topic de MQTT de datos de entrada
+static char TOPIC_OUT[100]="/home/dimmer/data"; // Topic de MQTT de datos de salida
+static char TOPIC_IN[100]="/home/dimmer/settings"; // Topic de MQTT de datos de entrada
 static esp_mqtt_client_handle_t client;
 
 void mqtt_send_info (void);
@@ -104,24 +104,18 @@ void mqtt_send_info(void)
     char out_char[10];
     memset(out_char, 0, sizeof(out_char));
     cJSON *root = cJSON_CreateObject();
-
     cJSON_AddStringToObject(root, "ID", ID);
+    cJSON_AddStringToObject(root, "MAC", mac_str);
     cJSON_AddStringToObject(root, "tipo", tipo_disp);
     strftime(formatted_time, sizeof(formatted_time), "%Y-%m-%d %H:%M:%S", timeinfo);
     cJSON_AddStringToObject(root, "time", formatted_time);
     cJSON_AddStringToObject(root, "valor", out_char);
-    if (strcmp(tipo_disp, "Temperatura") == 0) {
-        if (out_char == 0) {
-            sprintf(out_char, "0");
-        }
-        else {
-            sprintf(out_char, "100");
-        }
-    }
-
-    if (strcmp(tipo_disp, "Luz dimmerizable") == 0) {
-        sprintf(out_char, "%d", out_dim);
-    }
+    cJSON_AddStringToObject(root, "set_point", sp_char);
+    if(modo==0)
+        cJSON_AddStringToObject(root, "modo", "Manual");
+    if(modo==1)
+        cJSON_AddStringToObject(root, "modo", "Automático");
+    sprintf(out_char, "%d", out_dim);
     cJSON_AddStringToObject(root, "salida", out_char);
 
     char *json_string = cJSON_PrintUnformatted(root);
