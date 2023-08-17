@@ -52,13 +52,10 @@ void initialize_sntp(void)
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "pool.ntp.org");
     sntp_set_time_sync_notification_cb(time_sync_notification_cb);
-
     // Establecer el huso horario
     /* setenv("TZ", "GMT+3", 1); 
     tzset(); */
-    
     sntp_init();
-
     // Espera hasta que se complete la sincronización de tiempo
     while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET) {
         vTaskDelay(100 / portTICK_PERIOD_MS);

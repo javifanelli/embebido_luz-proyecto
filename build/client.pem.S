@@ -1,4 +1,4 @@
-/* * Data converted from /home/javi/Proyecto/Programas/proyecto_embebido/main/client.pem
+/* * Data converted from /home/javi/Proyecto/Programas/embebido_luz-proyecto/main/client.pem
  * (null byte appended)
  */
 .data

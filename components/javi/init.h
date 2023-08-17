@@ -1,6 +1,3 @@
-#define LED_R GPIO_NUM_15
-#define LED_G GPIO_NUM_4
-
 wifi_ap_record_t ap_info;
 struct tm *timeinfo;
 struct timeval tv;

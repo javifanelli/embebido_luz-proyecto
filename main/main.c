@@ -25,6 +25,7 @@
 #include "../components/esp-idf-lib-master/components/encoder/encoder.h"
 #include "../components/javi/init.h"
 #include "../components/javi/sntp_time.h"
+#include "../components/javi/pantallas.c"
 #include "../components/javi/led.c"
 #include "../components/javi/wifi_con.c"
 #include "../components/javi/mqtt_funcs.c"
@@ -41,7 +42,10 @@ void app_main(void)
 	
 	_queue = xQueueCreate(QUEUE_LENGTH, sizeof(rotary_encoder_event_t));
     
+	config_dis ();
+	pant_bienv ();
 	config_led();
+	pant_inicio ();
 	wifi_init_sta();
     if(net_con)
 		mqtt_app_start();
@@ -50,6 +54,7 @@ void app_main(void)
 	ESP_ERROR_CHECK(rotary_encoder_init(_queue));
 	ESP_ERROR_CHECK(rotary_encoder_add(&control));
 	
-	
-	read_enc();
+	btn_enc=false;
+	ssd1306_clear_screen(&devd, false);
+	xTaskCreate(read_enc, "read_enc", 4096*2, NULL, 4, NULL);
 }

@@ -1,4 +1,4 @@
-# Install script for directory: /home/javi/Proyecto/Programas/proyecto_embebido/main
+# Install script for directory: /home/javi/Proyecto/Programas/embebido_luz-proyecto/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

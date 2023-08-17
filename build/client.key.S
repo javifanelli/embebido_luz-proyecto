@@ -1,4 +1,4 @@
-/* * Data converted from /home/javi/Proyecto/Programas/proyecto_embebido/main/client.key
+/* * Data converted from /home/javi/Proyecto/Programas/embebido_luz-proyecto/main/client.key
  * (null byte appended)
  */
 .data

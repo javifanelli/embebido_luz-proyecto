@@ -1,4 +1,4 @@
-# Install script for directory: /home/javi/Proyecto/Programas/proyecto_embebido/components/ssd1306
+# Install script for directory: /home/javi/Proyecto/Programas/embebido_luz-proyecto/components/ssd1306
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

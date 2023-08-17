@@ -39,9 +39,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/javi/Proyecto/Programas/proyecto_embebido/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
-  include("/home/javi/Proyecto/Programas/proyecto_embebido/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
-  include("/home/javi/Proyecto/Programas/proyecto_embebido/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
+  include("/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
+  include("/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
+  include("/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
 
 endif()
 

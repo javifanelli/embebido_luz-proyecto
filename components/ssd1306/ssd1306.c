@@ -111,6 +111,8 @@ void ssd1306_display_text(SSD1306_t * dev, int page, char * text, int text_len, 
 	}
 }
 
+
+
 void ssd1306_display_text_with_value(SSD1306_t * dev, int page, char * text, int text_len, char * value, int value_len, bool invert)
 {
     if (page >= dev->_pages) return;

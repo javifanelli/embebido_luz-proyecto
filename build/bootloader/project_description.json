@@ -1,8 +1,8 @@
 {
     "project_name":       "bootloader",
     "project_path":       "/home/javi/esp4/esp-idf/components/bootloader/subproject",
-    "build_dir":          "/home/javi/Proyecto/Programas/proyecto_embebido/build/bootloader",
-    "config_file":        "/home/javi/Proyecto/Programas/proyecto_embebido/sdkconfig",
+    "build_dir":          "/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/bootloader",
+    "config_file":        "/home/javi/Proyecto/Programas/embebido_luz-proyecto/sdkconfig",
     "config_defaults":    "",
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",

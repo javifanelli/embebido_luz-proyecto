@@ -14,8 +14,10 @@ static EventGroupHandle_t s_wifi_event_group;
  * - we failed to connect after the maximum amount of retries */
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
-
 #define TAG "Proyecto"
+
+#define LED_R GPIO_NUM_15
+#define LED_G GPIO_NUM_4
 
 static int s_retry_num = 0;
 
@@ -52,6 +54,8 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 
 void wifi_init_sta(void)
 {   
+    ssd1306_display_text(&devd, 2, "Conectando", 10, false);
+    ssd1306_display_text(&devd, 3, "a la red...", 11, false);
     s_wifi_event_group = xEventGroupCreate();
 
     ESP_ERROR_CHECK(esp_netif_init());
@@ -108,6 +112,7 @@ void wifi_init_sta(void)
      * happened. */
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG, "connected to ap SSID:%s", EXAMPLE_ESP_WIFI_SSID);
+        ssd1306_display_text(&devd, 3, "a la red... OK", 14, false);
         gpio_set_level(LED_R, 0);
         gpio_set_level(LED_G, 1);
         net_con=true;
@@ -115,6 +120,7 @@ void wifi_init_sta(void)
         
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG, "Failed to connect to SSID:%s", EXAMPLE_ESP_WIFI_SSID);
+        ssd1306_display_text(&devd, 3, "a la red... ERR", 15, false);
         gpio_set_level(LED_G, 0);
         gpio_set_level(LED_R, 1);
         net_con=false;
@@ -127,7 +133,9 @@ void wifi_init_sta(void)
     ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
     esp_wifi_get_mac(ESP_IF_WIFI_STA, mac);
     sprintf(mac_short, "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    sprintf(mac_str, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    RSSI_CHAR[0] = 0;
     esp_wifi_sta_get_ap_info(&ap_info);
-    vEventGroupDelete(s_wifi_event_group);
+    rssi = ap_info.rssi;
+    sprintf(RSSI_CHAR, "%d", rssi);
+    //vEventGroupDelete(s_wifi_event_group);
 }

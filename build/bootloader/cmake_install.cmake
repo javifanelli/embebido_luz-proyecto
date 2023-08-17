@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/javi/Proyecto/Programas/proyecto_embebido/build/bootloader/esp-idf/cmake_install.cmake")
+  include("/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/bootloader/esp-idf/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/javi/Proyecto/Programas/proyecto_embebido/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/javi/Proyecto/Programas/embebido_luz-proyecto/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

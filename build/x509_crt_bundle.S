@@ -1,4 +1,4 @@
-/* * Data converted from /home/javi/Proyecto/Programas/proyecto_embebido/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/javi/Proyecto/Programas/embebido_luz-proyecto/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

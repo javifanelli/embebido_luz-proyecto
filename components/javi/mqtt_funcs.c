@@ -15,7 +15,8 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_pem_end");
 static int connection_retries = 0;
 static const char *ID ="2";
 static char *buffer_mqtt;
-static char TOPIC[50]="/home/temperatura/data"; // Topic de MQTT
+static char TOPIC_OUT[50]="/home/temperatura/data"; // Topic de MQTT de datos de salida
+static char TOPIC_IN[50]="/home/temperatura/settings"; // Topic de MQTT de datos de entrada
 static esp_mqtt_client_handle_t client;
 
 static void log_error_if_nonzero(const char *message, int error_code)
@@ -36,7 +37,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
         mqtt_state = true;
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_subscribe(client, TOPIC, 0);
+        msg_id = esp_mqtt_client_subscribe(client, TOPIC_OUT, 0);
+        msg_id = esp_mqtt_client_subscribe(client, TOPIC_IN, 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
         break;
 
@@ -121,7 +123,7 @@ void mqtt_send_info(void)
     cJSON_AddStringToObject(root, "salida", out_char);
 
     char *json_string = cJSON_PrintUnformatted(root);
-    esp_mqtt_client_publish(client, TOPIC, json_string, 0, 0, 0);
+    esp_mqtt_client_publish(client, TOPIC_OUT, json_string, 0, 0, 0);
 
     free(json_string);
     cJSON_Delete(root);

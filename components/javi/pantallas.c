@@ -2,13 +2,14 @@
 #include "../ssd1306/font8x8_basic.h"
 #define tag "SH1106"
 
-#define SDA_DIS	5 // Puerto SDA del i2c
-#define SCL_DIS	6 // Puerto SCL del i2c
+#define SDA_DIS	19 // Puerto SDA del i2c
+#define SCL_DIS	18 // Puerto SCL del i2c
 #define RST_DIS	-1 // Puerto Reset del i2c
 #define HOR_RES	128 // Resolución horizontal
 #define VER_RES	64 // Resolución vertical
 #define DELAY_BIENV 5000 // Delay de pantalla de bienvenida
 #define DELAY_CON 5000 // Delay de pantalla de conexión
+int	CONTRAST = 15; // Contraste del display
 
 SSD1306_t devd;
 
@@ -18,7 +19,7 @@ void pant_inicio (void);
 void pant_nocon(void);
 void pant_main (void);
 void pant_no_sensor(void);
-void menu0 (void *pvParameter);
+void menu0 (void);
 void menu1 (void);
 
 void config_dis (void)
@@ -56,6 +57,7 @@ void pant_inicio ()
 	ssd1306_display_text(&devd, 0, "Iniciando el", 12, false);
     ssd1306_display_text(&devd, 1, "sistema", 7, false);
 }
+
 void pant_conok ()
 {
 	ssd1306_clear_screen(&devd, false);
@@ -94,9 +96,9 @@ void pant_nocon(void)
 void pant_main(void)
 {
 	ssd1306_display_text(&devd, 0, pant_time, strlen(pant_time), true);
-    ssd1306_display_text_with_value(&devd, 1, "Temperatura: ", 13, temp_char, strlen(temp_char), false);
-    ssd1306_display_text_with_value(&devd, 2, "Humedad %: ", 11, hum_char, strlen(hum_char), false);
-	if (out_temp == false){
+    sprintf(out_char, "%d", out_dim/102);
+	ssd1306_display_text_with_value(&devd, 1, "Salida %: ", 10, out_char, strlen(out_char), false);
+	if (out_dim == false){
 		ssd1306_display_text(&devd, 3, "Salida: OFF", 11, false);
 	}
 	else {
@@ -104,13 +106,10 @@ void pant_main(void)
 	}
 	if (net_con){
 		ssd1306_display_text(&devd, 4, "Red: OK   ", 10, false);
-		// Encender el LED en color verde
-		
 	}
-	else if (!net_con) {
+	if (!net_con) {
 		ssd1306_display_text(&devd, 4, "Red: ERROR", 10, false);
-		// Encender el LED en color rojo
-		
+
 	}
 	if (mqtt_state){
 		ssd1306_display_text(&devd, 5, "Server: ONLINE ", 15, false);
@@ -122,7 +121,7 @@ void pant_main(void)
 	if (btn_enc){
 		level=1;
 		btn_enc=false;
-		xTaskCreate(menu0, "menu0", 4096, NULL, 5, NULL);
+		
 	}
 }
 
@@ -135,7 +134,7 @@ void pant_no_sensor(void)
 	ssd1306_clear_screen(&devd, false);
 }
 
-void menu0 (void *pvParameter)
+void menu0 (void)
 {
 	ssd1306_clear_screen(&devd, false);
 	btn_enc=false;

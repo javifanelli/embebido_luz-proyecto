@@ -14,12 +14,12 @@ TickType_t xLastWakeTime;
 bool btn_enc;
 extern bool inc_enc;
 extern bool dec_enc;
-int out_dim;
+extern int out_dim;
 
 void config_led (void);
 void pwm_init(void);
 void set_pwm_duty(int);
-void read_enc (void);
+void read_enc (void *pvParameter);
 
 void config_led (void)
 {
@@ -62,7 +62,7 @@ void set_pwm_duty(int duty)
     ledc_update_duty(LEDC_HIGH_SPEED_MODE, PWM_CHANNEL);
 }
 
-void read_enc (void)
+void read_enc (void *pvParameter)
 {
     while(1){
 		if(btn_enc && out_dim>0){
@@ -88,8 +88,11 @@ void read_enc (void)
 			if(out_dim<1)
 				out_dim=0;
 			ESP_LOGI(TAG,"Baja pwm");
+			
 		}
 		set_pwm_duty(out_dim);
-		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(10));
+		
+		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	}
+	vTaskDelete(NULL);
 }
