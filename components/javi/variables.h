@@ -15,10 +15,16 @@ bool net_con = false; // Variable global para almacenar el estado de la conexió
 bool mqtt_state = false; // Variable para detectar el estado de conexión al servidor por MQTT
 int out_dim = 0;
 char out_char[10];
+int set_point = 20; // Variable para ajustar el valor de set point de temperatura entre 18 y 28 grados Celsius
+char sp_char[10]; // Variable de set point en char
+int modo = 0; // Variable para el modo. 0=manual, 1=automático
+
 bool btn_enc = false; // Variable para detectar el botón pulsado
 bool inc_enc = false; // Variable para detectar el giro horario del encoder
 bool dec_enc = false; // Variable para detectar el giro antihorario del encoder
+
 int level = 0; // Variable para detectar el nivel del menú
+int pos_menu = 0; // Variable para detectar la posición dentro de los menúes
 TickType_t xLastWakeTime;
 char tipo_disp[50]="Luz dimmer";
 

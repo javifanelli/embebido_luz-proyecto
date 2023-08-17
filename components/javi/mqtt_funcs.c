@@ -15,9 +15,11 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_pem_end");
 static int connection_retries = 0;
 static const char *ID ="2";
 static char *buffer_mqtt;
-static char TOPIC_OUT[50]="/home/temperatura/data"; // Topic de MQTT de datos de salida
-static char TOPIC_IN[50]="/home/temperatura/settings"; // Topic de MQTT de datos de entrada
+static char TOPIC_OUT[50]="/home/dimmer/data"; // Topic de MQTT de datos de salida
+static char TOPIC_IN[50]="/home/dimmer/settings"; // Topic de MQTT de datos de entrada
 static esp_mqtt_client_handle_t client;
+
+void mqtt_send_info (void);
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {

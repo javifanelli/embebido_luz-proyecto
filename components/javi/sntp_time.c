@@ -16,7 +16,7 @@
 static const char *TAG = "SNTP Module";
 
 RTC_DATA_ATTR static int boot_count = 0;
-bool time_sinc_ok;
+extern bool time_sinc_ok;
 
 #ifdef CONFIG_SNTP_TIME_SYNC_METHOD_CUSTOM
 void sntp_sync_time(struct timeval *tv)

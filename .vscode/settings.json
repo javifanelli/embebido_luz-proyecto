@@ -32,7 +32,8 @@
         "variables.h": "c",
         "ledc.h": "c",
         "esp_timer.h": "c",
-        "esp_transport_ssl.h": "c"
+        "esp_transport_ssl.h": "c",
+        "esp_system.h": "c"
     },
     "idf.flashType": "UART",
     "idf.port": "/dev/ttyACM0"

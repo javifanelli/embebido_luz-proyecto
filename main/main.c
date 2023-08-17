@@ -30,7 +30,6 @@
 #include "../components/javi/wifi_con.c"
 #include "../components/javi/mqtt_funcs.c"
 
-
 #define QUEUE_LENGTH 10 // Define la longitud máxima de la cola
 static QueueHandle_t _queue;
 
