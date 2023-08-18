@@ -54,8 +54,11 @@ void app_main(void)
 	ESP_ERROR_CHECK(rotary_encoder_init(_queue));
 	ESP_ERROR_CHECK(rotary_encoder_add(&control));
 	
+	set_on_off_times();
+	
 	btn_enc=false;
 	ssd1306_clear_screen(&devd, false);
 	xTaskCreate(get_data, "get_data", 4096*8, NULL, 3, NULL);
 	xTaskCreate(read_enc, "read_enc", 4096*2, NULL, 4, NULL);
+	power_on_device();
 }

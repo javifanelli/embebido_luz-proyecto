@@ -6,6 +6,8 @@
 #define PWM_RESOLUTION   LEDC_TIMER_10_BIT // Resolución de 10 bits (0-1023)
 #define LED_R GPIO_NUM_15
 #define LED_G GPIO_NUM_4
+#define LED_B GPIO_NUM_2
+#define CONTROL GPIO_NUM_13
 #define refresh 5 // tiempo en segundos para refrescar medición en display
 #define TAG "Led"
 
@@ -21,21 +23,18 @@ void config_led (void);
 void pwm_init (void);
 void set_pwm_duty (int);
 void read_enc (void *pvParameter);
-
+void blink_led(void);
 
 void config_led (void)
 {
-    gpio_config_t io_conf;
-    io_conf.intr_type = GPIO_INTR_DISABLE;
-    io_conf.mode = GPIO_MODE_OUTPUT;
-    io_conf.pin_bit_mask = (1ULL << GPIO_NUM_2);
-    io_conf.pull_down_en = 0;
-    io_conf.pull_up_en = 0;
-    gpio_config(&io_conf);
-	gpio_pad_select_gpio(LED_R);
+    gpio_pad_select_gpio(LED_R);
     gpio_set_direction(LED_R, GPIO_MODE_OUTPUT);
 	gpio_pad_select_gpio(LED_G);
     gpio_set_direction(LED_G, GPIO_MODE_OUTPUT);
+	gpio_pad_select_gpio(CONTROL);
+    gpio_set_direction(CONTROL, GPIO_MODE_OUTPUT);
+	gpio_pad_select_gpio(LED_B);
+    gpio_set_direction(LED_B, GPIO_MODE_OUTPUT);
 }
 
 void pwm_init()
@@ -113,4 +112,23 @@ void read_enc (void *pvParameter)
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	}
 	vTaskDelete(NULL);
+}
+
+void blink_led(void){
+	int i=0;
+	bool led=false;
+	while(i<4){
+		if(!led){
+			gpio_set_level(LED_B, 1);
+			led=true;
+			printf("Prendo led\n");
+		}
+		else{
+			gpio_set_level(LED_B, 0);
+			led=false;
+			printf("Apago led\n");
+		}
+		vTaskDelay(pdMS_TO_TICKS(100));
+		i+=1;
+	}
 }

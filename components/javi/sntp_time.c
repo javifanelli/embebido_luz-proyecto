@@ -17,6 +17,9 @@ static const char *TAG = "SNTP Module";
 
 RTC_DATA_ATTR static int boot_count = 0;
 extern bool time_sinc_ok;
+time_t device_start_time = 0;
+struct tm on_time = {0}; // Hora de encendido
+struct tm off_time = {0}; // Hora de apagado
 
 #ifdef CONFIG_SNTP_TIME_SYNC_METHOD_CUSTOM
 void sntp_sync_time(struct timeval *tv)
@@ -63,3 +66,36 @@ void initialize_sntp(void)
     ESP_LOGI(TAG, "Time synchronized");
 }
 
+void update_device_start_time(void) {
+    time(&device_start_time);
+}
+
+void get_device_uptime(char *uptime_str, size_t max_size) {
+    time_t current_time;
+    time(&current_time);
+
+    time_t uptime_seconds = current_time - device_start_time;
+
+    int hours = uptime_seconds / 3600;
+    int minutes = (uptime_seconds % 3600) / 60;
+    int seconds = uptime_seconds % 60;
+
+    snprintf(uptime_str, max_size, "%02d:%02d:%02d", hours, minutes, seconds);
+}
+
+void power_on_device(void) {
+    update_device_start_time();
+    ESP_LOGI(TAG, "Device powered on at: %s", ctime(&device_start_time));
+}
+
+void set_on_off_times(void) {
+    // Establecer la hora de encendido
+    on_time.tm_hour = 20;
+    on_time.tm_min = 0;
+    on_time.tm_sec = 0;
+
+    // Establecer la hora de apagado
+    off_time.tm_hour = 8;
+    off_time.tm_min = 0;
+    off_time.tm_sec = 0;
+}

@@ -64,7 +64,7 @@ void pant_conok ()
 	ssd1306_display_text(&devd, 1, ip, strlen(ip), false);
 	ssd1306_display_text(&devd, 2, "MAC address:", 12, false);
 	ssd1306_display_text(&devd, 3, mac_short, strlen(mac_short), false);
-	ssd1306_display_text(&devd, 4, "Gateway IP:", 11, false);
+	ssd1306_display_text(&devd, 4, "Tiempo ONLINE:", 14, false);
 	ssd1306_display_text(&devd, 5, gw, strlen(gw), false);
 	ssd1306_display_text_with_value(&devd, 6, "Pot senal: ", 11, RSSI_CHAR, strlen(RSSI_CHAR), false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
@@ -78,7 +78,7 @@ void pant_nocon(void)
 	ssd1306_display_text(&devd, 1, "---.---.---.---", 15, false);
 	ssd1306_display_text(&devd, 2, "MAC address:", 12, false);
 	ssd1306_display_text(&devd, 3, "XXXXXXXX", 8, false);
-	ssd1306_display_text(&devd, 4, "Gateway IP:", 11, false);
+	ssd1306_display_text(&devd, 4, "Tiempo ONLINE:", 14, false);
 	ssd1306_display_text(&devd, 5, "---.---.---.---", 15, false);
 	ssd1306_display_text(&devd, 6, "Pot senal: XX", 11, false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);

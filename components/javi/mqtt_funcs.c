@@ -66,6 +66,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
         printf("DATA=%.*s\r\n", event->data_len, event->data);
         buffer_mqtt = event->data;
+        blink_led();
         break;
     
     case MQTT_EVENT_ERROR:
@@ -101,7 +102,7 @@ static void mqtt_app_start(void)
 
 void mqtt_send_info(void)
 {
-    char out_char[10];
+    
     memset(out_char, 0, sizeof(out_char));
     cJSON *root = cJSON_CreateObject();
     cJSON_AddStringToObject(root, "ID", ID);
