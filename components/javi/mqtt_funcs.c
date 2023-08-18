@@ -42,6 +42,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         msg_id = esp_mqtt_client_subscribe(client, TOPIC_OUT, 0);
         msg_id = esp_mqtt_client_subscribe(client, TOPIC_IN, 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+        mqtt_state=true;
         break;
 
     case MQTT_EVENT_DISCONNECTED:
@@ -101,22 +102,26 @@ static void mqtt_app_start(void)
 }
 
 void mqtt_send_info(void)
-{
-    
+{    
+    char out_char[10];
+    char sp_char[10];
     memset(out_char, 0, sizeof(out_char));
+    memset(sp_char, 0, sizeof(sp_char));
     cJSON *root = cJSON_CreateObject();
     cJSON_AddStringToObject(root, "ID", ID);
     cJSON_AddStringToObject(root, "MAC", mac_str);
     cJSON_AddStringToObject(root, "tipo", tipo_disp);
     strftime(formatted_time, sizeof(formatted_time), "%Y-%m-%d %H:%M:%S", timeinfo);
     cJSON_AddStringToObject(root, "time", formatted_time);
+    sprintf(out_char, "%d", out_dim);
     cJSON_AddStringToObject(root, "valor", out_char);
+    sprintf(sp_char, "%d", set_point);
     cJSON_AddStringToObject(root, "set_point", sp_char);
     if(modo==0)
         cJSON_AddStringToObject(root, "modo", "Manual");
     if(modo==1)
         cJSON_AddStringToObject(root, "modo", "Automático");
-    sprintf(out_char, "%d", out_dim);
+    
     cJSON_AddStringToObject(root, "salida", out_char);
 
     char *json_string = cJSON_PrintUnformatted(root);

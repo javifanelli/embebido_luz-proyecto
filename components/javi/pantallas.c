@@ -18,8 +18,11 @@ void pant_bienv (void);
 void pant_inicio (void);
 void pant_nocon (void);
 void pant_main (void);
+void pant_estok (void);
+void pant_esterr (void);
 void menu1 (void); // Menú de opciones
 void menu2 (void); // Menú de elección de modo manual o automático
+void menu3 (void); // Menú para ver hora de encendido y apagado del modo automático
 
 void config_dis (void)
 {
@@ -57,29 +60,38 @@ void pant_inicio ()
     ssd1306_display_text(&devd, 1, "sistema", 7, false);
 }
 
+void pant_estok()
+{
+	ssd1306_display_text(&devd, 0, "Estado OK", 9, false);
+	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
+}
+
+void pant_esterr()
+{
+	ssd1306_display_text(&devd, 0, "Estado ERROR", 12, false);
+	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
+}
+
 void pant_conok ()
 {
-	ssd1306_clear_screen(&devd, false);
-	ssd1306_display_text(&devd, 0, "IP address:", 11, false);
-	ssd1306_display_text(&devd, 1, ip, strlen(ip), false);
-	ssd1306_display_text(&devd, 2, "MAC address:", 12, false);
-	ssd1306_display_text(&devd, 3, mac_short, strlen(mac_short), false);
-	ssd1306_display_text(&devd, 4, "Tiempo ONLINE:", 14, false);
-	ssd1306_display_text(&devd, 5, gw, strlen(gw), false);
+	ssd1306_display_text(&devd, 0, "IP address", 10, false);
+	ssd1306_display_text(&devd, 1, ip, strlen(ip), true);
+	ssd1306_display_text(&devd, 2, "MAC address", 11, false);
+	ssd1306_display_text(&devd, 3, mac_short, strlen(mac_short), true);
+	ssd1306_display_text(&devd, 4, "IP gateway", 10, false);
+	ssd1306_display_text(&devd, 5, gw, strlen(gw), true);
 	ssd1306_display_text_with_value(&devd, 6, "Pot senal: ", 11, RSSI_CHAR, strlen(RSSI_CHAR), false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
 }
 
 void pant_nocon(void)
 {
-	ssd1306_clear_screen(&devd, false);
-	vTaskDelay(100 / portTICK_PERIOD_MS);
-	ssd1306_display_text(&devd, 0, "IP address:", 11, false);
-	ssd1306_display_text(&devd, 1, "---.---.---.---", 15, false);
+	ssd1306_display_text(&devd, 0, "IP address", 10, false);
+	ssd1306_display_text(&devd, 1, "---.---.---.---", 15, true);
 	ssd1306_display_text(&devd, 2, "MAC address:", 12, false);
-	ssd1306_display_text(&devd, 3, "XXXXXXXX", 8, false);
-	ssd1306_display_text(&devd, 4, "Tiempo ONLINE:", 14, false);
-	ssd1306_display_text(&devd, 5, "---.---.---.---", 15, false);
+	ssd1306_display_text(&devd, 3, "XXXXXXXX", 8, true);
+	ssd1306_display_text(&devd, 4, "IP gateway", 10, false);
+	ssd1306_display_text(&devd, 5, pant_time, strlen(pant_time), true);
 	ssd1306_display_text(&devd, 6, "Pot senal: XX", 11, false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
 }
@@ -122,26 +134,33 @@ void menu1 (void)
 			pos_menu--;
 			dec_enc=false;
 		}
-		if (pos_menu>4){
+		if (pos_menu>6){
 			pos_menu=1;
 			}
 		if (pos_menu<1){
-			pos_menu=4;
+			pos_menu=6;
 			}
 		if(pos_menu==1){
 			ssd1306_display_text(&devd, 0, "Estado", 6, true);
-			ssd1306_display_text(&devd, 1, "Modo", 4, false);
-			ssd1306_display_text(&devd, 2, "Actualizar hora", 15, false);
-			ssd1306_display_text(&devd, 3, "Pant. principal", 15, false);
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, false);
+			ssd1306_display_text(&devd, 2, "Modo", 4, false);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, false);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, false);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, false);
 			if(btn_enc){
 				btn_enc=false;
 				ssd1306_clear_screen(&devd, false);
 				while(!btn_enc){
-				if (net_con)
-					pant_conok();
-				
-				if (!net_con)
-					pant_nocon();
+					if (net_con){
+						ssd1306_clear_screen(&devd, false);
+						vTaskDelay(pdMS_TO_TICKS(10));
+						pant_conok();
+						}
+					if (!net_con){
+						ssd1306_clear_screen(&devd, false);
+						vTaskDelay(pdMS_TO_TICKS(10));
+						pant_nocon();
+					}
 				}
 				if(btn_enc){
 				btn_enc=false;
@@ -152,40 +171,84 @@ void menu1 (void)
 		}
 		if(pos_menu==2){
 			ssd1306_display_text(&devd, 0, "Estado", 6, false);
-			ssd1306_display_text(&devd, 1, "Modo", 4, true);
-			ssd1306_display_text(&devd, 2, "Actualizar hora", 15, false);
-			ssd1306_display_text(&devd, 3, "Pant. principal", 15, false);	
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, true);
+			ssd1306_display_text(&devd, 2, "Modo", 4, false);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, false);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, false);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, false);
+			if(btn_enc){
+				btn_enc=false;
+				ssd1306_clear_screen(&devd, false);
+				while(!btn_enc){
+				if (net_con)
+					pant_estok();
+				
+				if (!net_con)
+					pant_esterr();
+				}
+				if(btn_enc){
+				btn_enc=false;
+				level=1;
+				menu1();
+				}
+			}
+		}
+		if(pos_menu==3){
+			ssd1306_display_text(&devd, 0, "Estado", 6, false);
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, false);
+			ssd1306_display_text(&devd, 2, "Modo", 4, true);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, false);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, false);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, false);	
 			if(btn_enc){
 				btn_enc=false;
 				level=2;
 				menu2();
 			}
 		}
-		if(pos_menu==3){
-			ssd1306_display_text(&devd, 0, "Estado", 6, false);
-			ssd1306_display_text(&devd, 1, "Modo", 4, false);
-			ssd1306_display_text(&devd, 2, "Actualizar hora", 15, true);
-			ssd1306_display_text(&devd, 3, "Pant. principal", 15, false);
-			if(btn_enc){
-				btn_enc=false;
-				ssd1306_display_text(&devd, 5, "Obteniendo la", 13, false);
-    			ssd1306_display_text(&devd, 6, "hora...", 7, false);
-				obtain_time();
-				ssd1306_display_text(&devd, 6, "hora... OK", 10, false);
-				vTaskDelay(pdMS_TO_TICKS(1000));
-				ssd1306_display_text(&devd, 5, "               ", 15, false);
-				ssd1306_display_text(&devd, 6, "               ", 15, false);
-			}
-		}
 		if(pos_menu==4){
 			ssd1306_display_text(&devd, 0, "Estado", 6, false);
-			ssd1306_display_text(&devd, 1, "Modo", 4, false);
-			ssd1306_display_text(&devd, 2, "Actualizar hora", 15, false);
-			ssd1306_display_text(&devd, 3, "Pant. principal", 15, true);
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, false);
+			ssd1306_display_text(&devd, 2, "Modo", 4, false);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, true);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, false);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, false);	
+			if(btn_enc){
+				btn_enc=false;
+				level=2;
+				menu3();
+			}
+		}
+		if(pos_menu==5){
+			ssd1306_display_text(&devd, 0, "Estado", 6, false);
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, false);
+			ssd1306_display_text(&devd, 2, "Modo", 4, false);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, false);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, true);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, false);
+			if(btn_enc){
+				btn_enc=false;
+				ssd1306_display_text(&devd, 6, "Obteniendo la", 13, false);
+    			ssd1306_display_text(&devd, 7, "hora...", 7, false);
+				obtain_time();
+				ssd1306_display_text(&devd, 7, "hora... OK", 10, false);
+				vTaskDelay(pdMS_TO_TICKS(1000));
+				ssd1306_display_text(&devd, 6, "               ", 15, false);
+				ssd1306_display_text(&devd, 7, "               ", 15, false);
+			}
+		}
+		if(pos_menu==6){
+			ssd1306_display_text(&devd, 0, "Estado", 6, false);
+			ssd1306_display_text(&devd, 1, "Info conexion", 13, false);
+			ssd1306_display_text(&devd, 2, "Modo", 4, false);
+			ssd1306_display_text(&devd, 3, "Conf modo auto", 14, false);
+			ssd1306_display_text(&devd, 4, "Actualizar hora", 15, false);
+			ssd1306_display_text(&devd, 5, "Pant. principal", 15, true);
 			if (btn_enc){
 				btn_enc=false;
 				level=0;
 				ssd1306_clear_screen(&devd, false);
+				vTaskDelay(pdMS_TO_TICKS(10));
 				pant_main();	
 			}
 		}
@@ -254,5 +317,18 @@ void menu2 (void)
 				menu1();
 			}
 		}
+	}
+}
+
+void menu3(void)
+{
+	ssd1306_clear_screen(&devd, false);
+	ssd1306_display_text(&devd, 0, "Hora encendido", 14, false);
+	ssd1306_display_text(&devd, 2, "Hora apagado", 12, false);
+	ssd1306_display_text(&devd, 4, "Menu anterior", 13, true);
+	if(btn_enc){
+		btn_enc=false;
+		level=1;
+		menu1();
 	}
 }

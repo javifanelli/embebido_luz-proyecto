@@ -40,6 +40,7 @@ void obtain_time(void)
 {
     ESP_LOGI(TAG, "Obtaining time...");
     time_t now = 0;
+    time_t display_time = 0;
     struct tm timeinfo = { 0 };
     // Obtiene la hora actual
     time(&now);
@@ -55,9 +56,6 @@ void initialize_sntp(void)
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "pool.ntp.org");
     sntp_set_time_sync_notification_cb(time_sync_notification_cb);
-    // Establecer el huso horario
-    /* setenv("TZ", "GMT+3", 1); 
-    tzset(); */
     sntp_init();
     // Espera hasta que se complete la sincronización de tiempo
     while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET) {
@@ -73,13 +71,10 @@ void update_device_start_time(void) {
 void get_device_uptime(char *uptime_str, size_t max_size) {
     time_t current_time;
     time(&current_time);
-
     time_t uptime_seconds = current_time - device_start_time;
-
-    int hours = uptime_seconds / 3600;
-    int minutes = (uptime_seconds % 3600) / 60;
-    int seconds = uptime_seconds % 60;
-
+    int hours=uptime_seconds/3600;
+    int minutes=(uptime_seconds%3600)/60;
+    int seconds=uptime_seconds%60;
     snprintf(uptime_str, max_size, "%02d:%02d:%02d", hours, minutes, seconds);
 }
 

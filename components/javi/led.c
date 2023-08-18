@@ -121,12 +121,10 @@ void blink_led(void){
 		if(!led){
 			gpio_set_level(LED_B, 1);
 			led=true;
-			printf("Prendo led\n");
 		}
 		else{
 			gpio_set_level(LED_B, 0);
 			led=false;
-			printf("Apago led\n");
 		}
 		vTaskDelay(pdMS_TO_TICKS(100));
 		i+=1;
