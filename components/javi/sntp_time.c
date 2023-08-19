@@ -20,6 +20,8 @@ extern bool time_sinc_ok;
 time_t device_start_time = 0;
 struct tm on_time = {0}; // Hora de encendido
 struct tm off_time = {0}; // Hora de apagado
+extern char formatted_on_time[6];
+extern char formatted_off_time[6];
 
 #ifdef CONFIG_SNTP_TIME_SYNC_METHOD_CUSTOM
 void sntp_sync_time(struct timeval *tv)
@@ -93,4 +95,7 @@ void set_on_off_times(void) {
     off_time.tm_hour = 8;
     off_time.tm_min = 0;
     off_time.tm_sec = 0;
+    
+    snprintf(formatted_on_time, sizeof(formatted_on_time), "%02d:%02d", on_time.tm_hour, on_time.tm_min);
+    snprintf(formatted_off_time, sizeof(formatted_off_time), "%02d:%02d", off_time.tm_hour, off_time.tm_min);
 }

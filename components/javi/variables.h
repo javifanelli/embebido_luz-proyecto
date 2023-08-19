@@ -9,14 +9,16 @@ static char ip[16]; // IP del dispositivo ESP32
 static char gw[16]; // IP del gateway de red
 char formatted_time[20]; // Fecha y hora en char para mandar por MQTT
 char pant_time[20]; // Fecha y hora en char para mostrar en display
+char formatted_on_time[6];
+char formatted_off_time[6];
+
 static int8_t rssi = 0; // Potencia de la señal
 char RSSI_CHAR[10]; // Potencia de la señal en char
 bool net_con = false; // Variable global para almacenar el estado de la conexión WiFi
 bool mqtt_state = false; // Variable para detectar el estado de conexión al servidor por MQTT
 int out_dim = 0;
-int aux=0;
 char out_char[20];
-int set_point = 0; // Variable para ajustar el valor de set point de la salida enter 0 y 100
+int set_point = 50; // Variable para ajustar el valor de set point de la salida enter 0 y 100
 char sp_char[10]; // Variable de set point en char
 int modo = 0; // Variable para el modo. 0=manual, 1=automático
 

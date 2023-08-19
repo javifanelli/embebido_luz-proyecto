@@ -71,44 +71,45 @@ void set_pwm_duty(int duty)
 
 void read_enc (void *pvParameter)
 {
-    while(1){
-		if (level==0 && btn_enc){
+    while(level==0){
+		if (btn_enc){
 			btn_enc=false;
 			level=1;
 			menu1();
 		}
-		if (modo==1 && level==0 && inc_enc){	
+		if (modo==1 && inc_enc){	
 			inc_enc=false;
-			set_point+=1;
-				if(set_point>28)
-					set_point=28;
+			set_point+=10;
+				if(set_point>100)
+					set_point=100;
 			sprintf(sp_char, "%d", set_point);
 			pant_main();
 		}	
-    	if(modo==1 && level==0 && dec_enc){
+    	if(modo==1 && dec_enc){
 			dec_enc=false;
-			set_point-=1;
-			if(set_point<18)
-				set_point=18;
+			set_point-=10;
+			if(set_point<10)
+				set_point=0;
 			sprintf(sp_char, "%d", set_point);
 			pant_main();
 			}
-		if(modo==0 && level==0 && dec_enc){
-			dec_enc=false;
-			out_dim-=102;
-			if(out_dim<102)
-				out_dim=0;
-			pant_main();
-		}
-		if(modo==0 && level==0 && inc_enc){	
+		if(modo==0 && inc_enc){	
 			inc_enc=false;
 			out_dim+=102;
 			if(out_dim>1020)
 				out_dim=1020;
+			sprintf(out_char, "%d", out_dim/102*10);
+			pant_main();
+		}
+		if(modo==0 && dec_enc){
+			dec_enc=false;
+			out_dim-=102;
+			if(out_dim<102)
+				out_dim=0;
+			sprintf(out_char, "%d", out_dim/102*10);
 			pant_main();
 		}
 		set_pwm_duty(out_dim);
-        sprintf(out_char, "%d", out_dim/102*10);
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	}
 	vTaskDelete(NULL);

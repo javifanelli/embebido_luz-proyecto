@@ -561,7 +561,7 @@
 				},
 				{
 					"backtrace" : 14,
-					"define" : "PROJECT_VER=\"3c99cdf4-dirty\""
+					"define" : "PROJECT_VER=\"caf932af-dirty\""
 				}
 			],
 			"includes" : 
