@@ -30,6 +30,13 @@ void get_data(void *pvParameter)
             mqtt_send_info();
             }
         cont_mqtt++;
+        if(modo==1){
+                set_times();
+                if(time_func)
+                    out_dim=set_point;
+                if(!time_func)
+                    out_dim=0;
+            }
         vTaskDelay(pdMS_TO_TICKS(1000*refresh));
    	}
    vTaskDelete(NULL);

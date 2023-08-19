@@ -16,6 +16,6 @@ void initialize_sntp(void);
 void power_on_device(void);
 void update_device_start_time(void);
 void get_device_uptime(char *uptime_str, size_t max_len);
-void set_on_off_times(void);
+void set_times(void);
 
 #endif /* SNTP_TIME_H_ */

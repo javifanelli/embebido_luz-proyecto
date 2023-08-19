@@ -22,6 +22,12 @@ int set_point = 50; // Variable para ajustar el valor de set point de la salida 
 char sp_char[10]; // Variable de set point en char
 int modo = 0; // Variable para el modo. 0=manual, 1=automático
 
+bool time_func=false; // Variable para analizar si debe activarse la salida
+int hon=0; // Hora de encendido
+int mon=53; // Minutos de encendido
+int hoff=0; // Hora de encendido
+int moff=57; // Minutos de encendido
+
 bool btn_enc = false; // Variable para detectar el botón pulsado
 bool inc_enc = false; // Variable para detectar el giro horario del encoder
 bool dec_enc = false; // Variable para detectar el giro antihorario del encoder

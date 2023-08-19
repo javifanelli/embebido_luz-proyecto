@@ -61,14 +61,14 @@ void pant_inicio ()
 
 void pant_est()
 {
-	if(mqtt_state)
-		ssd1306_display_text(&devd, 0, "Server: ONLINE ", 15, false);
-	else if(!mqtt_state)
-		ssd1306_display_text(&devd, 0, "Server: OFFLINE", 15, false);
 	if(net_con)
-		ssd1306_display_text(&devd, 1, "Red: ONLINE", 11, false);
+		ssd1306_display_text(&devd, 0, "Red: ONLINE", 11, false);
 	else if(!net_con)
-		ssd1306_display_text(&devd, 1, "Red: OFFLINE", 12, false);
+		ssd1306_display_text(&devd, 0, "Red: OFFLINE", 12, false);
+	if(mqtt_state)
+		ssd1306_display_text(&devd, 1, "Server: ONLINE ", 15, false);
+	else if(!mqtt_state)
+		ssd1306_display_text(&devd, 1, "Server: OFFLINE", 15, false);
 	ssd1306_display_text(&devd, 2, "Tiempo encendido", 16, false);
 	ssd1306_display_text(&devd, 3, pant_time, strlen(pant_time), false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);

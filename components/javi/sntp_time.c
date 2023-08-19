@@ -22,6 +22,11 @@ struct tm on_time = {0}; // Hora de encendido
 struct tm off_time = {0}; // Hora de apagado
 extern char formatted_on_time[6];
 extern char formatted_off_time[6];
+extern int hon; // Hora de encendido
+extern int mon; // Minutos de encendido
+extern int hoff; // Hora de encendido
+extern int moff; // Minutos de encendido
+extern bool time_func;
 
 #ifdef CONFIG_SNTP_TIME_SYNC_METHOD_CUSTOM
 void sntp_sync_time(struct timeval *tv)
@@ -85,17 +90,26 @@ void power_on_device(void) {
     ESP_LOGI(TAG, "Device powered on at: %s", ctime(&device_start_time));
 }
 
-void set_on_off_times(void) {
-    // Establecer la hora de encendido
-    on_time.tm_hour = 20;
-    on_time.tm_min = 0;
+void set_times(void) {
+    // Hora de encendido
+    on_time.tm_hour = hon;
+    on_time.tm_min = mon;
     on_time.tm_sec = 0;
-
-    // Establecer la hora de apagado
-    off_time.tm_hour = 8;
-    off_time.tm_min = 0;
+    // Hora de apagado
+    off_time.tm_hour = hoff;
+    off_time.tm_min = moff;
     off_time.tm_sec = 0;
-    
+    time_t now;
+    struct tm *timeinfo;
+    time(&now);
+    now-=3*3600;
+    timeinfo = localtime(&now);
+    if(timeinfo->tm_hour == on_time.tm_hour && timeinfo->tm_min == on_time.tm_min)
+        time_func=true;
+    else if(timeinfo->tm_hour == off_time.tm_hour && timeinfo->tm_min == off_time.tm_min)
+        time_func=false;
+    now = time(NULL);
+    timeinfo = localtime(&now);
     snprintf(formatted_on_time, sizeof(formatted_on_time), "%02d:%02d", on_time.tm_hour, on_time.tm_min);
     snprintf(formatted_off_time, sizeof(formatted_off_time), "%02d:%02d", off_time.tm_hour, off_time.tm_min);
 }
