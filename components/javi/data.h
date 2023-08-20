@@ -9,6 +9,7 @@ void get_data (void *pvParameter);
 void get_data(void *pvParameter)
 {
     while(1) {
+        set_times();
         if (!time_sinc_ok)
             obtain_time();
         time_t now = time(NULL);
@@ -31,7 +32,6 @@ void get_data(void *pvParameter)
             }
         cont_mqtt++;
         if(modo==1){
-                set_times();
                 if(time_func)
                     out_dim=set_point;
                 if(!time_func)

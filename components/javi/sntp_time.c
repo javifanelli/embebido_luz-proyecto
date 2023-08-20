@@ -20,8 +20,8 @@ extern bool time_sinc_ok;
 time_t device_start_time = 0;
 struct tm on_time = {0}; // Hora de encendido
 struct tm off_time = {0}; // Hora de apagado
-extern char formatted_on_time[6];
-extern char formatted_off_time[6];
+extern char pant_on_time[8];
+extern char pant_off_time[8];
 extern int hon; // Hora de encendido
 extern int mon; // Minutos de encendido
 extern int hoff; // Hora de encendido
@@ -110,6 +110,7 @@ void set_times(void) {
         time_func=false;
     now = time(NULL);
     timeinfo = localtime(&now);
-    snprintf(formatted_on_time, sizeof(formatted_on_time), "%02d:%02d", on_time.tm_hour, on_time.tm_min);
-    snprintf(formatted_off_time, sizeof(formatted_off_time), "%02d:%02d", off_time.tm_hour, off_time.tm_min);
+    strftime(pant_on_time, sizeof(pant_on_time), "%H:%M", &on_time);
+    strftime(pant_off_time, sizeof(pant_off_time), "%H:%M", &off_time);
+
 }

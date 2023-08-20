@@ -8,9 +8,9 @@ static char mac_short[13]; // MAC del dispositivo ESP32 en char sin los :
 static char ip[16]; // IP del dispositivo ESP32
 static char gw[16]; // IP del gateway de red
 char formatted_time[20]; // Fecha y hora en char para mandar por MQTT
-char pant_time[20]; // Fecha y hora en char para mostrar en display
-char formatted_on_time[6];
-char formatted_off_time[6];
+char pant_time[18]; // Fecha y hora en char para mostrar en display
+char pant_on_time[8];
+char pant_off_time[8];
 
 static int8_t rssi = 0; // Potencia de la señal
 char RSSI_CHAR[10]; // Potencia de la señal en char
