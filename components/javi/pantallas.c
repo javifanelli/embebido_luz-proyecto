@@ -263,7 +263,6 @@ void menu1 (void)
 		ssd1306_clear_screen(&devd, false);
 		pant_main();
 	}
-
 }
 
 void menu2 (void)

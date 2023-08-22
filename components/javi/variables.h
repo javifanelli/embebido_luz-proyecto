@@ -19,14 +19,14 @@ bool mqtt_state = false; // Variable para detectar el estado de conexión al ser
 int out_dim = 0;
 char out_char[20];
 int set_point = 50; // Variable para ajustar el valor de set point de la salida enter 0 y 100
-char sp_char[10]; // Variable de set point en char
+char sp_char[20]; // Variable de set point en char
 int modo = 0; // Variable para el modo. 0=manual, 1=automático
 
 bool time_func=false; // Variable para analizar si debe activarse la salida
-int hon=0; // Hora de encendido
-int mon=53; // Minutos de encendido
-int hoff=0; // Hora de encendido
-int moff=57; // Minutos de encendido
+int hon=20; // Hora de encendido
+int mon=0; // Minutos de encendido
+int hoff=8; // Hora de encendido
+int moff=0; // Minutos de encendido
 
 bool btn_enc = false; // Variable para detectar el botón pulsado
 bool inc_enc = false; // Variable para detectar el giro horario del encoder

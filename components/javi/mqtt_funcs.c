@@ -102,9 +102,8 @@ static void mqtt_app_start(void)
 }
 
 void mqtt_send_info(void)
-{    
-    char out_char[10];
-    char sp_char[10];
+{   
+    char hon_c[4], mon_c[4], hoff_c[4], moff_c[4];
     memset(out_char, 0, sizeof(out_char));
     memset(sp_char, 0, sizeof(sp_char));
     cJSON *root = cJSON_CreateObject();
@@ -113,7 +112,7 @@ void mqtt_send_info(void)
     cJSON_AddStringToObject(root, "tipo", tipo_disp);
     strftime(formatted_time, sizeof(formatted_time), "%Y-%m-%d %H:%M:%S", timeinfo);
     cJSON_AddStringToObject(root, "time", formatted_time);
-    sprintf(out_char, "%d", out_dim);
+    sprintf(out_char, "%d", out_dim/102*10);
     cJSON_AddStringToObject(root, "valor", out_char);
     sprintf(sp_char, "%d", set_point);
     cJSON_AddStringToObject(root, "set_point", sp_char);
@@ -121,9 +120,15 @@ void mqtt_send_info(void)
         cJSON_AddStringToObject(root, "modo", "Manual");
     if(modo==1)
         cJSON_AddStringToObject(root, "modo", "Automático");
-    
     cJSON_AddStringToObject(root, "salida", out_char);
-
+    sprintf(hon_c, "%d", hon);
+    sprintf(mon_c, "%d", mon);
+    sprintf(hoff_c, "%d", hoff);
+    sprintf(moff_c, "%d", moff);
+    cJSON_AddStringToObject(root, "hon", hon_c);
+    cJSON_AddStringToObject(root, "mon", mon_c);
+    cJSON_AddStringToObject(root, "hoff", hoff_c);
+    cJSON_AddStringToObject(root, "moff", moff_c);
     char *json_string = cJSON_PrintUnformatted(root);
     esp_mqtt_client_publish(client, TOPIC_OUT, json_string, 0, 0, 0);
 
