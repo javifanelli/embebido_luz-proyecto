@@ -10,9 +10,7 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_pem_end");
 
 #define BROKER_URI "mqtts://192.168.0.70" // IP del broker (Raspberry Pi)
 #define TAG "sensor"
-#define MAX_CONNECTION_RETRIES 3
 
-static int connection_retries = 0;
 static const char *ID ="2";
 static char *buffer_mqtt;
 static char TOPIC_OUT[100]="/home/dimmer/data"; // Topic de MQTT de datos de salida
@@ -20,6 +18,7 @@ static char TOPIC_IN[100]="/home/dimmer/settings"; // Topic de MQTT de datos de 
 static esp_mqtt_client_handle_t client;
 
 void mqtt_send_info (void);
+void mqtt_rcv_info (void);
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -68,6 +67,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         printf("DATA=%.*s\r\n", event->data_len, event->data);
         buffer_mqtt = event->data;
         blink_led();
+        mqtt_rcv_info();
         break;
     
     case MQTT_EVENT_ERROR:
@@ -131,7 +131,41 @@ void mqtt_send_info(void)
     cJSON_AddStringToObject(root, "moff", moff_c);
     char *json_string = cJSON_PrintUnformatted(root);
     esp_mqtt_client_publish(client, TOPIC_OUT, json_string, 0, 0, 0);
-
     free(json_string);
+    cJSON_Delete(root);
+}
+
+void mqtt_rcv_info(void)
+{
+    cJSON *root = cJSON_Parse(buffer_mqtt);
+    if (root == NULL) {
+        ESP_LOGE(TAG, "Failed to parse MQTT data");
+        return;
+    }
+    const cJSON *setpoint = cJSON_GetObjectItemCaseSensitive(root, "setpoint");
+    if (cJSON_IsNumber(setpoint)) {
+        set_point=setpoint->valueint;
+        ESP_LOGI(TAG, "Received MQTT setpoint: %d", set_point);
+    }
+    const cJSON *horaon = cJSON_GetObjectItemCaseSensitive(root, "hon");
+    if (cJSON_IsNumber(horaon)) {
+        hon=horaon->valueint;
+        ESP_LOGI(TAG, "Received MQTT on hour: %d", hon);
+    }
+    const cJSON *minutoon = cJSON_GetObjectItemCaseSensitive(root, "mon");
+    if (cJSON_IsNumber(minutoon)) {
+        mon=minutoon->valueint;
+        ESP_LOGI(TAG, "Received MQTT on minutes: %d", mon);
+    }
+    const cJSON *horaoff = cJSON_GetObjectItemCaseSensitive(root, "hoff");
+    if (cJSON_IsNumber(horaoff)) {
+        hoff=horaoff->valueint;
+        ESP_LOGI(TAG, "Received MQTT off hour: %d", hoff);
+    }
+    const cJSON *minutooff = cJSON_GetObjectItemCaseSensitive(root, "moff");
+    if (cJSON_IsNumber(minutooff)) {
+        moff=minutooff->valueint;
+        ESP_LOGI(TAG, "Received MQTT off minutes: %d", moff);
+    }
     cJSON_Delete(root);
 }

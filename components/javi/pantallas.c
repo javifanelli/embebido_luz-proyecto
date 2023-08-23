@@ -61,6 +61,8 @@ void pant_inicio ()
 
 void pant_est()
 {
+	char uptime_buffer[20];
+	get_device_uptime(uptime_buffer, sizeof(uptime_buffer));
 	if(net_con)
 		ssd1306_display_text(&devd, 0, "Red: ONLINE", 11, false);
 	else if(!net_con)
@@ -70,7 +72,7 @@ void pant_est()
 	else if(!mqtt_state)
 		ssd1306_display_text(&devd, 1, "Server: OFFLINE", 15, false);
 	ssd1306_display_text(&devd, 2, "Tiempo encendido", 16, false);
-	ssd1306_display_text(&devd, 3, pant_time, strlen(pant_time), false);
+	ssd1306_display_text(&devd, 3, uptime_buffer, strlen(uptime_buffer), false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
 	while(level==11){
 		if(btn_enc){
