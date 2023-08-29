@@ -65,7 +65,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
         printf("DATA=%.*s\r\n", event->data_len, event->data);
         buffer_mqtt = event->data;
-        blink_led();
         mqtt_rcv_info();
         break;
     
@@ -102,6 +101,7 @@ static void mqtt_app_start(void)
 
 void mqtt_send_info(void)
 {   
+    blink_2();
     char hon_c[4], mon_c[4], hoff_c[4], moff_c[4];
     memset(out_char, 0, sizeof(out_char));
     memset(sp_char, 0, sizeof(sp_char));
@@ -150,6 +150,7 @@ void mqtt_rcv_info(void)
             ESP_LOGI(TAG, "Received correct MQTT ID");
             select=true;
         }
+    blink_3();
     }
     const cJSON *salida = cJSON_GetObjectItemCaseSensitive(root, "salida");
     if (cJSON_IsNumber(salida) && select) {
