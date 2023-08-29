@@ -7,6 +7,7 @@
 #define LED_R GPIO_NUM_15
 #define LED_G GPIO_NUM_4
 #define LED_B GPIO_NUM_2
+#define BTN_MODO GPIO_NUM_0
 #define CONTROL GPIO_NUM_13
 #define refresh 5 // tiempo en segundos para refrescar medición en display
 #define TAG "Led"
@@ -35,6 +36,8 @@ void config_led (void)
     gpio_set_direction(CONTROL, GPIO_MODE_OUTPUT);
 	gpio_pad_select_gpio(LED_B);
     gpio_set_direction(LED_B, GPIO_MODE_OUTPUT);
+	gpio_pad_select_gpio(BTN_MODO);
+    gpio_set_direction(BTN_MODO, GPIO_MODE_INPUT);
 }
 
 void pwm_init()
@@ -98,7 +101,8 @@ void read_enc (void *pvParameter)
 			set_point+=10;
 				if(set_point>100)
 					set_point=100;
-			sprintf(sp_char, "%d", set_point);
+			/* sprintf(sp_char, "%d", set_point); */
+			out_dim=set_point;
 			pant_main();
 		}	
     	if(modo==1 && dec_enc){
@@ -106,9 +110,11 @@ void read_enc (void *pvParameter)
 			set_point-=10;
 			if(set_point<10)
 				set_point=0;
-			sprintf(sp_char, "%d", set_point);
+			/* sprintf(sp_char, "%d", set_point); */
+			out_dim=set_point;
 			pant_main();
 			}
+		sprintf(sp_char, "%d", set_point);
 		set_pwm_duty(out_dim);
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	}

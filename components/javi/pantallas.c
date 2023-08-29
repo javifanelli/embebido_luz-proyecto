@@ -142,8 +142,6 @@ void pant_main(void)
 		ssd1306_display_text(&devd, 3, "Modo: Manual", 16, false);
 	if(modo==1)
 		ssd1306_display_text(&devd, 3, "Modo: Automatico", 16, false);
-	sprintf(sp_char,"%d", set_point);
-	ssd1306_display_text_with_value(&devd, 4, "Setpoint: ", 10, sp_char, 3, false);
 	ssd1306_display_text(&devd, 7, "Menu", 4, true);
 }
 

@@ -37,5 +37,5 @@
         "stddef.h": "c"
     },
     "idf.flashType": "UART",
-    "idf.port": "/dev/ttyACM1"
+    "idf.port": "/dev/ttyACM0"
 }

@@ -35,7 +35,8 @@ bool dec_enc = false; // Variable para detectar el giro antihorario del encoder
 int level = 0; // Variable para detectar el nivel del menú
 int pos_menu = 0; // Variable para detectar la posición dentro de los menúes
 
-TickType_t xLastWakeTime;
 char tipo_disp[50]="Luz dimmer";
+static const char *ID ="2";
+TickType_t xLastWakeTime;
 
 #endif
