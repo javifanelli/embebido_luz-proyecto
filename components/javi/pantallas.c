@@ -73,6 +73,8 @@ void pant_est()
 		ssd1306_display_text(&devd, 1, "Server: OFFLINE", 15, false);
 	ssd1306_display_text(&devd, 2, "Tiempo encendido", 16, false);
 	ssd1306_display_text(&devd, 3, uptime_buffer, strlen(uptime_buffer), false);
+	ssd1306_display_text(&devd, 4, "ID dispositivo", 14, false);
+	ssd1306_display_text(&devd, 5, ID, strlen(ID), false);
 	ssd1306_display_text(&devd, 7, "Menu anterior", 13, true);
 	while(level==11){
 		if(btn_enc){

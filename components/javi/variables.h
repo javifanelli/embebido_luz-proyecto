@@ -36,7 +36,8 @@ int level = 0; // Variable para detectar el nivel del menú
 int pos_menu = 0; // Variable para detectar la posición dentro de los menúes
 
 char tipo_disp[50]="Luz dimmer";
-static const char *ID ="2";
+/* char *ID ="2"; */
+char *ID ="0128192332001"; // 2 digitos para el tipo, 4 digitos de codigo, 2 digitos para el año, 2 digitos para la semana, 3 digitos para el numero de dispositivo
 TickType_t xLastWakeTime;
 
 #endif
