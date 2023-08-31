@@ -102,7 +102,6 @@ void read_enc (void *pvParameter)
 			set_point+=10;
 				if(set_point>100)
 					set_point=100;
-			/* sprintf(sp_char, "%d", set_point); */
 			out_dim=set_point;
 			pant_main();
 		}	
@@ -111,7 +110,6 @@ void read_enc (void *pvParameter)
 			set_point-=10;
 			if(set_point<10)
 				set_point=0;
-			/* sprintf(sp_char, "%d", set_point); */
 			out_dim=set_point;
 			pant_main();
 			}
