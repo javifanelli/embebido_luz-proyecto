@@ -194,6 +194,7 @@ void mqtt_rcv_info(void)
         } else {
         ESP_LOGW(TAG, "Received unknown MQTT mode: %s", modo_str);
         }
+        pant_main();
     }
     cJSON_Delete(root);
 }
