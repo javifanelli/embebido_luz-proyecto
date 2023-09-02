@@ -24,18 +24,19 @@ void get_data(void *pvParameter)
         esp_wifi_sta_get_ap_info(&ap_info);
         net_con = (ap_info.authmode != WIFI_AUTH_OPEN);
         if(cont_mqtt==60){
+            cont_mqtt=0;
             if (!net_con)
             	esp_wifi_connect();
-            if(mqtt_state)    
-                cont_mqtt=0;
-            mqtt_send_info();
-            }
+            if(mqtt_state)
+                mqtt_send_info();
+        }
         cont_mqtt++;
         if(modo==1){
-                if(time_func)
-                    out_dim=set_point;
-                if(!time_func)
-                    out_dim=0;
+            if(time_func)
+                out_dim=set_point;
+            if(!time_func)
+                out_dim=0;
+            sprintf(out_char, "%d", set_point);
             }
         vTaskDelay(pdMS_TO_TICKS(1000*refresh));
    	}

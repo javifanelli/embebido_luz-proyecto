@@ -112,5 +112,4 @@ void set_times(void) {
     timeinfo = localtime(&now);
     strftime(pant_on_time, sizeof(pant_on_time), "%H:%M", &on_time);
     strftime(pant_off_time, sizeof(pant_off_time), "%H:%M", &off_time);
-
 }
