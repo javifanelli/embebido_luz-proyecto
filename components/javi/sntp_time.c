@@ -99,14 +99,18 @@ void set_times(void) {
     off_time.tm_hour = hoff;
     off_time.tm_min = moff;
     off_time.tm_sec = 0;
+    int on_time_minutes = hon * 60 + mon;
+    int off_time_minutes = hoff * 60 + moff;
     time_t now;
     struct tm *timeinfo;
     time(&now);
     now-=3*3600;
     timeinfo = localtime(&now);
-    if(timeinfo->tm_hour == on_time.tm_hour && timeinfo->tm_min == on_time.tm_min)
+    int current_time_minutes = timeinfo->tm_hour * 60 + timeinfo->tm_min;
+    if ((current_time_minutes >= on_time_minutes && current_time_minutes < off_time_minutes) ||
+        (on_time_minutes > off_time_minutes && (current_time_minutes >= on_time_minutes || current_time_minutes < off_time_minutes)))
         time_func=true;
-    else if(timeinfo->tm_hour == off_time.tm_hour && timeinfo->tm_min == off_time.tm_min)
+    else
         time_func=false;
     now = time(NULL);
     timeinfo = localtime(&now);

@@ -16,6 +16,7 @@ static char *buffer_topic;
 static char TOPIC_OUT[100]="/home/dimmer/data"; // Topic de MQTT de datos de salida
 static char TOPIC_IN[100]="/home/dimmer/settings"; // Topic de MQTT de datos de entrada
 static char TOPIC_CONFIG[100]="/home/config";
+static char TOPIC_SETUP[100]="/home/setup";
 static esp_mqtt_client_handle_t client;
 
 void mqtt_send_info (void);
@@ -38,8 +39,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
     mqtt_state = true;
     ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-    /* msg_id = esp_mqtt_client_subscribe(client, TOPIC_OUT, 0); */
     msg_id = esp_mqtt_client_subscribe(client, TOPIC_IN, 0);
+    msg_id = esp_mqtt_client_subscribe(client, TOPIC_SETUP, 0);
     ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
     mqtt_state = true;
     if (!init) {
@@ -93,11 +94,15 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         buffer_mqtt[event->data_len] = '\0';
         memcpy(buffer_topic, event->topic, event->topic_len);
         buffer_topic[event->topic_len] = '\0';
-        ESP_LOGI(TAG, "Test topic %s", buffer_topic);
         if (strcmp(buffer_topic, TOPIC_IN) == 0) {
             ESP_LOGI(TAG, "Received data via MQTT");
             mqtt_rcv_info();
-        } else {
+        }
+        else if (strcmp(buffer_topic, TOPIC_SETUP) == 0) {
+            ESP_LOGI(TAG, "Received initial setup via MQTT");
+            mqtt_rcv_info();
+        }
+        else {
             ESP_LOGW(TAG, "Received data from an unknown MQTT topic");
         }
         free(buffer_mqtt);
