@@ -338,175 +338,19 @@ void menu2 (void)
 
 void menu3(void)
 {
-	pos_menu=1;
+	ssd1306_display_text(&devd, 0, "Hora encendido  ", 16, false);
+	ssd1306_display_text_with_value(&devd, 1, "     ", 5, pant_on_time, strlen(pant_on_time), false);
+	ssd1306_display_text(&devd, 2, "Hora apagado    ", 16, false);
+	ssd1306_display_text_with_value(&devd, 3, "     ", 5, pant_off_time, strlen(pant_off_time), false);
+	ssd1306_display_text(&devd, 4, "Valor encendido ", 16, false);
+	ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
+	ssd1306_display_text(&devd, 6, "Menu anterior   ", 16, true);
 	while(level==3){
-		if(inc_enc){
-			pos_menu++;
-			inc_enc=false;
-			if (pos_menu>4)
-				pos_menu=1;
-		}	
-		if (dec_enc){
-			pos_menu--;
-			dec_enc=false;
-			if (pos_menu<1)
-				pos_menu=4;
+		if(btn_enc){
+		btn_enc=false;
+		level=1;
 		}
-		if(pos_menu==1)
-		{
-			int cont=0;
-			ssd1306_display_text(&devd, 0, "Hora encendido  ", 16, true);
-			ssd1306_display_text_with_value(&devd, 1, "     ", 5, pant_on_time, strlen(pant_on_time), false);
-			ssd1306_display_text(&devd, 2, "Hora apagado    ", 16, false);
-			ssd1306_display_text_with_value(&devd, 3, "     ", 5, pant_off_time, strlen(pant_off_time), false);
-			ssd1306_display_text(&devd, 4, "Valor encendido ", 16, false);
-			ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
-			ssd1306_display_text(&devd, 6, "Menu anterior   ", 16, false);
-			if(btn_enc){
-				btn_enc=false;
-				while(!btn_enc){
-					ssd1306_display_text_with_value(&devd, 1, "HH   ", 5, pant_on_time, strlen(pant_on_time), false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					ssd1306_display_text(&devd, 1, "                ", 16, false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					if(inc_enc){
-						inc_enc=false;
-						hon++;
-						if(hon>23)
-							hon=0;
-					}
-					if(dec_enc){
-						dec_enc=false;
-						hon--;
-						if(hon<0)
-							hon=23;
-					}
-					set_times();
-				}
-				btn_enc=false;
-				while(!btn_enc){
-					ssd1306_display_text_with_value(&devd, 1, "mm   ", 5, pant_on_time, strlen(pant_on_time), false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					ssd1306_display_text(&devd, 1, "                ", 16, false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					if(inc_enc){
-						inc_enc=false;
-						mon++;
-						if(mon>60)
-							mon=0;
-					}
-					if(dec_enc){
-						dec_enc=false;
-						mon--;
-						if(mon<0)
-							mon=59;
-					}
-					set_times();
-				}
-				btn_enc=false;
-			}
-		}
-		if(pos_menu==2)
-		{
-			ssd1306_display_text(&devd, 0, "Hora encendido  ", 16, false);
-			ssd1306_display_text_with_value(&devd, 1, "     ", 5, pant_on_time, strlen(pant_on_time), false);
-			ssd1306_display_text(&devd, 2, "Hora apagado    ", 16, true);
-			ssd1306_display_text_with_value(&devd, 3, "     ", 5, pant_off_time, strlen(pant_off_time), false);
-			ssd1306_display_text(&devd, 4, "Valor encendido ", 16, false);
-			ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
-			ssd1306_display_text(&devd, 6, "Menu anterior   ", 16, false);
-			if(btn_enc){
-				btn_enc=false;
-				while(!btn_enc){
-					ssd1306_display_text_with_value(&devd, 3, "HH   ", 5, pant_off_time, strlen(pant_off_time), false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					ssd1306_display_text(&devd, 3, "                ", 16, false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					if(inc_enc){
-						inc_enc=false;
-						hoff++;
-						if(hoff>23)
-							hoff=0;
-					}
-					if(dec_enc){
-						dec_enc=false;
-						hoff--;
-						if(hoff<0)
-							hoff=23;
-					}
-					set_times();
-				}
-				btn_enc=false;
-				while(!btn_enc){
-					ssd1306_display_text_with_value(&devd, 3, "mm   ", 5, pant_off_time, strlen(pant_off_time), false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					ssd1306_display_text(&devd, 3, "                ", 16, false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					if(inc_enc){
-						inc_enc=false;
-						moff++;
-						if(moff>60)
-							moff=0;
-					}
-					if(dec_enc){
-						dec_enc=false;
-						moff--;
-						if(moff<0)
-							moff=59;
-					}
-					set_times();
-				}
-				btn_enc=false;
-			}
-		}
-		if(pos_menu==3)
-		{
-			ssd1306_display_text(&devd, 0, "Hora encendido  ", 16, false);
-			ssd1306_display_text_with_value(&devd, 1, "     ", 5, pant_on_time, strlen(pant_on_time), false);
-			ssd1306_display_text(&devd, 2, "Hora apagado    ", 16, false);
-			ssd1306_display_text_with_value(&devd, 3, "     ", 5, pant_off_time, strlen(pant_off_time), false);
-			ssd1306_display_text(&devd, 4, "Valor encendido ", 16, true);
-			ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
-			ssd1306_display_text(&devd, 6, "Menu anterior   ", 16, false);
-			if(btn_enc){
-				btn_enc=false;
-				while(!btn_enc){
-					ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					ssd1306_display_text(&devd, 5, "                ", 16, false);
-					vTaskDelay(pdMS_TO_TICKS(100));
-					if(inc_enc){
-						inc_enc=false;
-						set_point+=10;
-						if(set_point>100)
-							set_point=100;
-					}
-					if(dec_enc){
-						dec_enc=false;
-						set_point-=10;
-						if(set_point<0)
-							set_point=0;
-					}
-					sprintf(sp_char, "%d", set_point);
-				}
-				btn_enc=false;
-			}
-		}
-		if(pos_menu==4)
-		{
-			ssd1306_display_text(&devd, 0, "Hora encendido  ", 16, false);
-			ssd1306_display_text_with_value(&devd, 1, "     ", 5, pant_on_time, strlen(pant_on_time), false);
-			ssd1306_display_text(&devd, 2, "Hora apagado    ", 16, false);
-			ssd1306_display_text_with_value(&devd, 3, "     ", 5, pant_off_time, strlen(pant_off_time), false);
-			ssd1306_display_text(&devd, 4, "Valor encendido ", 16, false);
-			ssd1306_display_text_with_value(&devd, 5, "       ", 7, sp_char, strlen(sp_char), false);
-			ssd1306_display_text(&devd, 6, "Menu anterior   ", 16, true);
-			if(btn_enc){
-				btn_enc=false;
-				level=1;
-			}
-		}
-	}
+	}		
 	if(level==1){
 		ssd1306_clear_screen(&devd, false);
 		menu1();

@@ -12,8 +12,10 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_pem_end");
 #define TAG "sensor"
 
 static char *buffer_mqtt;
+static char *buffer_topic;
 static char TOPIC_OUT[100]="/home/dimmer/data"; // Topic de MQTT de datos de salida
 static char TOPIC_IN[100]="/home/dimmer/settings"; // Topic de MQTT de datos de entrada
+static char TOPIC_CONFIG[100]="/home/config";
 static esp_mqtt_client_handle_t client;
 
 void mqtt_send_info (void);
@@ -32,16 +34,25 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     esp_mqtt_event_handle_t event = event_data;
     esp_mqtt_client_handle_t client = event->client;
     int msg_id;
-
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
-        mqtt_state = true;
-        ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_subscribe(client, TOPIC_OUT, 0);
-        msg_id = esp_mqtt_client_subscribe(client, TOPIC_IN, 0);
-        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
-        mqtt_state=true;
-        break;
+    mqtt_state = true;
+    ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+    /* msg_id = esp_mqtt_client_subscribe(client, TOPIC_OUT, 0); */
+    msg_id = esp_mqtt_client_subscribe(client, TOPIC_IN, 0);
+    ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+    mqtt_state = true;
+    if (!init) {
+        cJSON *root = cJSON_CreateObject();
+        cJSON_AddStringToObject(root, "ID", ID);
+        char *json_string = cJSON_PrintUnformatted(root);
+        blink_1();
+        esp_mqtt_client_publish(client, TOPIC_CONFIG, json_string, 0, 0, 0);
+        free(json_string);
+        cJSON_Delete(root);
+        init = true;
+    }
+    break;
 
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -62,12 +73,37 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     
     case MQTT_EVENT_DATA:
         ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-        printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
-        printf("DATA=%.*s\r\n", event->data_len, event->data);
-        buffer_mqtt = event->data;
-        mqtt_rcv_info();
+        printf("TOPIC=");
+        for (int i = 0; i < event->topic_len; i++) {
+            putchar(event->topic[i]);
+        }
+        putchar('\n');
+        printf("DATA=");
+        for (int i = 0; i < event->data_len; i++) {
+            putchar(event->data[i]);
+        }
+        putchar('\n');
+        buffer_mqtt = malloc(event->data_len + 1);
+        buffer_topic = malloc(event->topic_len + 1);
+        if (buffer_mqtt == NULL || buffer_topic == NULL) {
+            ESP_LOGE(TAG, "Memory allocation failed");
         break;
-    
+        }
+        memcpy(buffer_mqtt, event->data, event->data_len);
+        buffer_mqtt[event->data_len] = '\0';
+        memcpy(buffer_topic, event->topic, event->topic_len);
+        buffer_topic[event->topic_len] = '\0';
+        ESP_LOGI(TAG, "Test topic %s", buffer_topic);
+        if (strcmp(buffer_topic, TOPIC_IN) == 0) {
+            ESP_LOGI(TAG, "Received data via MQTT");
+            mqtt_rcv_info();
+        } else {
+            ESP_LOGW(TAG, "Received data from an unknown MQTT topic");
+        }
+        free(buffer_mqtt);
+        free(buffer_topic);
+        break;
+
     case MQTT_EVENT_ERROR:
         ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
         if (event->error_handle->error_type == MQTT_ERROR_TYPE_TCP_TRANSPORT) {

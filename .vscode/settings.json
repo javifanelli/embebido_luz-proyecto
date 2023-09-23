@@ -35,7 +35,8 @@
         "esp_transport_ssl.h": "c",
         "esp_system.h": "c",
         "stddef.h": "c",
-        "thread": "c"
+        "thread": "c",
+        "*.tcc": "c"
     },
     "idf.flashType": "UART",
     "idf.port": "/dev/ttyACM0"

@@ -50,7 +50,7 @@ void app_main(void)
     if(net_con)
 		mqtt_app_start();
 	pwm_init();
-
+	
 	ESP_ERROR_CHECK(rotary_encoder_init(_queue));
 	ESP_ERROR_CHECK(rotary_encoder_add(&control));
 	
