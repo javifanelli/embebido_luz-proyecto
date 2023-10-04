@@ -33,7 +33,7 @@ void get_data(void *pvParameter)
         cont_mqtt++;
         if(modo==1){
             if(time_func)
-                out_dim=set_point;
+                out_dim=set_point/10*102;
             if(!time_func)
                 out_dim=0;
             sprintf(out_char, "%d", set_point);

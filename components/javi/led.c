@@ -81,25 +81,27 @@ void read_enc (void *pvParameter)
 			level=1;
 			menu1();
 		}
-		if(modo==0 && inc_enc){	
-			inc_enc=false;
-			out_dim+=102;
-			if(out_dim>1020)
-				out_dim=1020;
-			sprintf(out_char, "%d", out_dim/102*10);
-			pant_main();
-		}
-		if(modo==0 && dec_enc){
-			dec_enc=false;
-			out_dim-=102;
-			if(out_dim<102)
-				out_dim=0;
-			sprintf(out_char, "%d", out_dim/102*10);
-			pant_main();
+		if(modo==0) {	
+			if(inc_enc){
+				inc_enc=false;
+				out_dim+=102;
+					if(out_dim>1020)
+						out_dim=1020;
+				sprintf(out_char, "%d", out_dim/102*10);
+				pant_main();
+			}
+			if(dec_enc){
+				dec_enc=false;
+				out_dim-=102;
+				if(out_dim<102)
+					out_dim=0;
+				sprintf(out_char, "%d", out_dim/102*10);
+				pant_main();
+			}
 		}
 		sprintf(sp_char, "%d", set_point);
 		set_pwm_duty(out_dim);
-		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
+		vTaskDelay(pdMS_TO_TICKS(50));
 	}
 	vTaskDelete(NULL);
 }

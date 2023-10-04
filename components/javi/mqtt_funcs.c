@@ -159,7 +159,7 @@ void mqtt_send_info(void)
     if(modo==0)
         cJSON_AddStringToObject(root, "modo", "Manual");
     if(modo==1)
-        cJSON_AddStringToObject(root, "modo", "Automático");
+        cJSON_AddStringToObject(root, "modo", "Automatico");
     cJSON_AddStringToObject(root, "salida", out_char);
     sprintf(hon_c, "%d", hon);
     sprintf(mon_c, "%d", mon);
