@@ -141,7 +141,7 @@ void pant_main(void)
 	if(out_dim>0)
 		ssd1306_display_text(&devd, 2, "Salida: ON      ", 16, false);
 	if(modo==0)
-		ssd1306_display_text(&devd, 3, "Modo: Manual", 16, false);
+		ssd1306_display_text(&devd, 3, "Modo: Manual    ", 16, false);
 	if(modo==1)
 		ssd1306_display_text(&devd, 3, "Modo: Automatico", 16, false);
 	ssd1306_display_text(&devd, 4, "                ", 16, false);
@@ -285,7 +285,7 @@ void menu2 (void)
 		}
 		ssd1306_display_text(&devd, 4, "Modo actual:    ", 16, false);
 		if(modo==0)
-			ssd1306_display_text(&devd, 5, "Manual", 6, true);
+			ssd1306_display_text(&devd, 5, "Manual    ", 10, true);
 		if(modo==1)
 			ssd1306_display_text(&devd, 5, "Automatico", 10, true);
 		if(pos_menu==1){
